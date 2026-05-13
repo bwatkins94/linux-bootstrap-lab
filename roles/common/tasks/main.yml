@@ -18,7 +18,7 @@
       - jq
       - build-essential
       - python3-pip
-    state: present 
+    state: present
   tags:
     - common
     - packages
@@ -37,5 +37,3 @@
     mode: "0755"
   tags:
     - common
-
-
