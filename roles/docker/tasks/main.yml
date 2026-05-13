@@ -1,0 +1,43 @@
+---
+- name: Install Docker
+  ansible.builtin.apt:
+    name: docker.io
+    state: present
+  tags:
+    - docker
+
+- name: Configure Docker daemon
+  ansible.builtin.copy:
+    dest: /etc/docker/daemon.json
+    mode: "0644"
+    content: |
+      {
+        "log-driver": "json-file"
+        "log-opts": {
+          "max-size": "10m"
+          "max-file": "3"
+        }
+      }
+  notify: restart docker
+  tags:
+    - docker
+    - docker_config
+
+- name: Ensure Docker service is running and enabled
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: true
+  tags:
+    - docker
+
+- name: Add ubuntu user to docker group
+  ansible.builtin.user:
+    name: ubunutu
+    groups: docker
+    append: true
+  tags:
+    - docker
+    - users
+
+

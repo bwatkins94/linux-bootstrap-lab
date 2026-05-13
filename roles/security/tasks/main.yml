@@ -1,0 +1,48 @@
+---
+- name: Install security packages
+  ansible.builtin.apt:
+    name:
+      - ufw
+      - fail2ban
+    state: present
+  tags:
+    - security
+
+- name: Allow SSH through firewall
+  community.general.ufw:
+    rule: allow
+    name: OpenSSH
+  tags:
+    - security
+    - firewall
+
+- name: Enable UFW
+  community.general.ufw:
+    state: enabled
+    policy: deny
+  tags:
+    - security
+    - firewall
+
+- name: Disable root SSH login
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^#?PermitRootLogin"
+    line: "PermitRootLogin no"
+    validate: "sshd -t -f %s"
+  notify: restart ssh
+  tags:
+    - security
+    - ssh
+
+- name: Disable SSH password authentication
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^#?PasswordAuthentication"
+    line: "PasswordAuthentication no"
+    validate: "sshd -t -f %s"
+  notify: restart ssh
+  tags:
+    - security
+    - ssh
+

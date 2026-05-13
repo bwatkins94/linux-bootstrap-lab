@@ -1,0 +1,8 @@
+- name: Bootstrap Linux VM
+  hosts: lab
+  become: true
+
+  roles:
+    - common
+    - docker
+    - security
