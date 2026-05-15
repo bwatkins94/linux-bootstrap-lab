@@ -1,0 +1,10 @@
+---
+common_packages:
+  - git
+  - curl
+  - vim
+  - htop
+  - unzip
+  - jq
+  - build-essential
+  - python3-pip
